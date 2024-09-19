@@ -1,8 +1,11 @@
 #include "main.h"
 
 int main(int argc, char** argv) {
+    char name[50];
+    printf("Enter a data dictonary name; ");
+    fgets(name, sizeof(name), stdin);
 
-    initializeDataDictionary();
+    initializeDataDictionary(name);
 
     return 0;
 }
