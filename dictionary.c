@@ -1,13 +1,27 @@
 #include "dictionary.h"
 
-int initializeDataDictionary(const char *dictionaryName) {
+FILE* initializeDataDictionary(const char *dictionaryName) {
     long mainheader = EMPTY_POINTER;
 
     printf("Initializing Data Dictionary...\n");
     
     FILE *dictionary = fopen(dictionaryName, "w+");
     fwrite(&mainheader, sizeof(mainheader), 1, dictionary);
-    return EXIT_SUCCESS;
+    return dictionary;
+}
+
+int appendEntity(FILE* dataDictionary, ENTITY newEntity)
+{
+fseek(dataDictionary,0, SEEK_END);
+long entityDirection = ftell(dataDictionary);
+fwrite(newEntity.name, DATA_BLOCK_SIZE,1,dataDictionary);
+fwrite(&newEntity.dataPointer, sizeof(long), 1,dataDictionary);
+fwrite(&newEntity.attributesPointer, sizeof(long),1,dataDictionary);
+fwrite(&newEntity.nextEntity, sizeof(long),1,dataDictionary);
+return entityDirection;
+}
+    
+    
 
     void reorderEntities(FILE* dataDictionary, ENTITY newEntity, long newEntityDirection)
     {
@@ -31,4 +45,3 @@ int initializeDataDictionary(const char *dictionaryName) {
         fseek(dataDictionary, entityDataPointer, SEEK_SET);
         fwrite(&newEntityDirection, sizeof(long), 1, dataDictionary)
     }
-}
